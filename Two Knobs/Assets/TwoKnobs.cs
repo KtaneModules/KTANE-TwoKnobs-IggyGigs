@@ -7,28 +7,30 @@ using UnityEngine;
 using KModkit;
 using Rnd = UnityEngine.Random;
 
-public class TwoKnobs : MonoBehaviour {
+public class TwoKnobs : MonoBehaviour
+{
 
-   public KMBombInfo Bomb;
-   public KMAudio Audio;
+    public KMBombInfo Bomb;
+    public KMAudio Audio;
 
-   public KMSelectable knobG, knobW;
-   public TextMesh displayNumber;
-   public Color[] colors;
+    public KMSelectable knobG, knobW;
+    public TextMesh displayNumber;
+    public Color[] colors;
 
-   public float delay = 2.5f;
-   float timer;
-   int interval, initialDisplay, displayedNum, digitalKey, cdKey, pressCount, clickDelay;
+    public float delay = 2.5f;
+    float timer;
+    int interval, initialDisplay, displayedNum, digitalKey, cdKey, pressCount, clickDelay;
 
-   bool inputPhase = false;
+    bool inputPhase = false;
 
-   static int ModuleIdCounter = 1;
-   int ModuleId;
-   private bool ModuleSolved;
+    static int ModuleIdCounter = 1;
+    int ModuleId;
+    private bool ModuleSolved;
 
-   void Awake () {
-      ModuleId = ModuleIdCounter++;
-      
+    void Awake()
+    {
+        ModuleId = ModuleIdCounter++;
+
 
         /*
         foreach (KMSelectable object in keypad) {
@@ -98,7 +100,8 @@ public class TwoKnobs : MonoBehaviour {
         displayedNum = initialDisplay;
         displayNumber.text = displayedNum + "";
     }
-    void Start () {
+    void Start()
+    {
         pressCount = 0;
         initialDisplay = Rnd.Range(0, 11);
         displayedNum = initialDisplay;
@@ -120,7 +123,8 @@ public class TwoKnobs : MonoBehaviour {
         StartCoroutine(SlowRotate());
     }
 
-   void Update () {
+    void Update()
+    {
         //if (solvedModules < Bomb.GetSolvedModuleNames().Count())
         //{
         //    solvedModules++;
@@ -128,7 +132,7 @@ public class TwoKnobs : MonoBehaviour {
         //}
         if (ModuleSolved)
             return;
-        if(!inputPhase)
+        if (!inputPhase)
         {
             timer += Time.deltaTime;
             if (timer > delay)
@@ -140,7 +144,7 @@ public class TwoKnobs : MonoBehaviour {
         else
         {
             timer += Time.deltaTime;
-            if(timer > delay)
+            if (timer > delay)
             {
                 ChangeNumberInput();
                 timer = 0;
@@ -164,55 +168,55 @@ public class TwoKnobs : MonoBehaviour {
             trueRows++;
             Debug.LogFormat("[Two Knobs #{0}] Row {1} is applicable.", ModuleId, 0);
         }
-        if(Bomb.IsIndicatorOn(Indicator.FRK))
+        if (Bomb.IsIndicatorOn(Indicator.FRK))
         {
             trueRows++;
             total++;
             Debug.LogFormat("[Two Knobs #{0}] Row {1} is applicable.", ModuleId, 1);
         }
-        if(Bomb.IsPortPresent(Port.Serial))
+        if (Bomb.IsPortPresent(Port.Serial))
         {
             trueRows++;
             total += 2;
             Debug.LogFormat("[Two Knobs #{0}] Row {1} is applicable.", ModuleId, 2);
         }
-        if(Bomb.GetSerialNumberNumbers().ElementAt(Bomb.GetSerialNumberNumbers().Count()-1)%2==1)
+        if (Bomb.GetSerialNumberNumbers().ElementAt(Bomb.GetSerialNumberNumbers().Count() - 1) % 2 == 1)
         {
             trueRows++;
             total += 3;
             Debug.LogFormat("[Two Knobs #{0}] Row {1} is applicable.", ModuleId, 3);
         }
-        if(dBattCount>aaBattCount)
+        if (dBattCount > aaBattCount)
         {
             trueRows++;
             total += 4;
             Debug.LogFormat("[Two Knobs #{0}] Row {1} is applicable.", ModuleId, 4);
         }
-        if(Bomb.IsIndicatorOff(Indicator.BOB))
+        if (Bomb.IsIndicatorOff(Indicator.BOB))
         {
             trueRows++;
             total += 5;
             Debug.LogFormat("[Two Knobs #{0}] Row {1} is applicable.", ModuleId, 5);
         }
-        if(Bomb.IsIndicatorOn(Indicator.BOB))
+        if (Bomb.IsIndicatorOn(Indicator.BOB))
         {
             trueRows++;
             total += 6;
             Debug.LogFormat("[Two Knobs #{0}] Row {1} is applicable.", ModuleId, 6);
         }
-        if(Bomb.IsPortPresent(Port.Parallel))
+        if (Bomb.IsPortPresent(Port.Parallel))
         {
             trueRows++;
             total += 7;
             Debug.LogFormat("[Two Knobs #{0}] Row {1} is applicable.", ModuleId, 7);
         }
-        if(Bomb.GetBatteryCount()==0)
+        if (Bomb.GetBatteryCount() == 0)
         {
             trueRows++;
             total += 8;
             Debug.LogFormat("[Two Knobs #{0}] Row {1} is applicable.", ModuleId, 8);
         }
-        if(Bomb.GetPortPlateCount()>=3)
+        if (Bomb.GetPortPlateCount() >= 3)
         {
             trueRows++;
             total += 9;
@@ -261,14 +265,14 @@ public class TwoKnobs : MonoBehaviour {
     int DigitalRoot(int[] arr)
     {
         int sum = 0;
-        for(int i = 0; i < arr.Length; i++)
+        for (int i = 0; i < arr.Length; i++)
             sum += arr[i];
         while (sum >= 10)
             sum = (sum % 10) + (sum / 10);
         return sum;
     }
 
-   IEnumerator SlowRotate()
+    IEnumerator SlowRotate()
     {
         while (!ModuleSolved)
         {
@@ -295,15 +299,4 @@ public class TwoKnobs : MonoBehaviour {
             displayedNum = 1;
         displayNumber.text = displayedNum + "";
     }
-#pragma warning disable 414
-   private readonly string TwitchHelpMessage = @"Use !{0} to do something.";
-#pragma warning restore 414
-
-   IEnumerator ProcessTwitchCommand (string Command) {
-      yield return null;
-   }
-
-   IEnumerator TwitchHandleForcedSolve () {
-      yield return null;
-   }
 }
